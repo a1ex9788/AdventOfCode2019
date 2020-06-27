@@ -13,7 +13,7 @@ namespace AdventOfCode2019Tests
         [DataRow("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51\nU98,R91,D20,R16,D67,R40,U7,R15,U6,R7", 135)]
         public void ManhattanDistanceTest(string paths, int expectedManhattanDistance)
         {
-            Assert.AreEqual((new Day3Solver(paths)).SolvePart1(), expectedManhattanDistance);
+            Assert.AreEqual(expectedManhattanDistance, (new Day3Solver(paths)).SolvePart1());
         }
 
         [TestMethod]
@@ -22,20 +22,20 @@ namespace AdventOfCode2019Tests
         [DataRow("R98,U47,R26,D63,R33,U87,L62,D20,R33,U53,R51\nU98,R91,D20,R16,D67,R40,U7,R15,U6,R7", 410)]
         public void FewestStepsTest(string paths, int expectedSteps)
         {
-            Assert.AreEqual((new Day3Solver(paths)).SolvePart2(), expectedSteps);
+            Assert.AreEqual(expectedSteps, (new Day3Solver(paths)).SolvePart2());
         }
 
 
         [TestMethod]
         public void Part1Test()
         {
-            Assert.AreEqual((new Day3Solver(Resources.Day3Input)).SolvePart1(), 627);
+            Assert.AreEqual(627, (new Day3Solver(Resources.Day3Input)).SolvePart1());
         }
 
         [TestMethod]
         public void Part2Test()
         {
-            Assert.AreEqual((new Day3Solver(Resources.Day3Input)).SolvePart2(), 13190);
+            Assert.AreEqual(13190, (new Day3Solver(Resources.Day3Input)).SolvePart2());
         }
     }
 }
