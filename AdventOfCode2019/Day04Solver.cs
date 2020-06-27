@@ -1,4 +1,5 @@
 ﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -38,13 +39,14 @@ namespace AdventOfCode2019
         }
 
 
-        public bool FitIn(int number) { return HasAdjacentEqualNumbers(number) && NeverDecreases(number); }
+        public bool FitIn(int number)
+        {
+            return HasAdjacentEqualNumbers(number) && NeverDecreases(number);
+        }
 
-        public bool FitInJustTwoAdjacentEqualDigits(int number) {
-            
-            bool b = HasJustTwoAdjacentEqualNumbers(number) && NeverDecreases(number);
-            if (b) Console.WriteLine(number);
-            return b;
+        public bool FitInJustTwoAdjacentEqualDigits(int number)
+        {            
+            return HasJustTwoAdjacentEqualNumbers(number) && NeverDecreases(number);
         }
 
         bool HasAdjacentEqualNumbers(int number)

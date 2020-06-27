@@ -7,11 +7,14 @@ namespace AdventOfCode2019
     {
         static void Main(string[] args)
         {
-            Solver solver = new Day1Solver(Resources.Day1Input);
+            Solver solver = new Day7Solver(Resources.Day7Input);
 
-            Console.WriteLine("-----------------------------------------------------------------------");
-            Console.WriteLine("Part 1: " + solver.SolvePart1() + "\nPart 2: " + solver.SolvePart2());
-            Console.WriteLine("-----------------------------------------------------------------------");
+            int part1Result = solver.SolvePart1();
+            int part2Result = solver.SolvePart2();
+
+            Console.WriteLine("-------------------");
+            Console.WriteLine("Part 1: " + part1Result + "\nPart 2: " + part2Result);
+            Console.WriteLine("-------------------");
             Console.Read();
         }
     }

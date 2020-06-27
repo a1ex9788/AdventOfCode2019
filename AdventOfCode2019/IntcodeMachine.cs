@@ -50,7 +50,7 @@ namespace AdventOfCode2019
                     case 3:
                         if (firstParMode == 0)
                         {
-                            if (input == null) { Console.WriteLine("Write an input: "); codes[codes[i + 1]] = int.Parse(Console.ReadLine()); }
+                            if (input == null) { Console.Write("Write an input: "); codes[codes[i + 1]] = int.Parse(Console.ReadLine()); }
                             else { codes[codes[i + 1]] = input[0]; input.RemoveAt(0); }
                         }
                         else
