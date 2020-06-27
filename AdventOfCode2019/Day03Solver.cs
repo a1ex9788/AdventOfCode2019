@@ -9,6 +9,7 @@ namespace AdventOfCode2019
     {
         string[] path1;
         string[] path2;
+        List<Point> commonPoints;
 
         public Day3Solver(string input)
         {
@@ -19,24 +20,27 @@ namespace AdventOfCode2019
 
         public override int SolvePart1()
         {
-            List<Point> path1Points = GetVisitedPoints(path1);
-            List<Point> path2Points = GetVisitedPoints(path2);
-
-            List<Point> commonPoints = (from p in path1Points where path2Points.Contains(p) select p).ToList();
+            CalculeCommonPoints();
 
             return commonPoints.Min(p => Math.Abs(p.x) + Math.Abs(p.y));
         }
 
         public override int SolvePart2()
         {
-            List<Point> path1Points = GetVisitedPoints(path1);
-            List<Point> path2Points = GetVisitedPoints(path2);
-
-            List<Point> commonPoints = (from p in path1Points where path2Points.Contains(p) select p).ToList();
+            if (commonPoints == null)
+                CalculeCommonPoints();
 
             return commonPoints.Min(p => StepsToReach(p));
         }
 
+
+        void CalculeCommonPoints()
+        {
+            List<Point> path1Points = GetVisitedPoints(path1);
+            List<Point> path2Points = GetVisitedPoints(path2);
+
+            commonPoints = (from p in path1Points where path2Points.Contains(p) select p).ToList();
+        }
 
         int StepsToReach(Point p)
         {
