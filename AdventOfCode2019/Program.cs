@@ -9,8 +9,8 @@ namespace AdventOfCode2019
         {
             Solver solver = new Day7Solver(Resources.Day7Input);
 
-            int part1Result = solver.SolvePart1();
-            int part2Result = solver.SolvePart2();
+            long part1Result = solver.SolvePart1();
+            long part2Result = solver.SolvePart2();
 
             Console.WriteLine("-------------------");
             Console.WriteLine("Part 1: " + part1Result + "\nPart 2: " + part2Result);

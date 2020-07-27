@@ -28,7 +28,7 @@ namespace AdventOfCode2019
         }
 
 
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
             int maxNumberOfAsteroids = 0;
 
@@ -46,7 +46,7 @@ namespace AdventOfCode2019
             return maxNumberOfAsteroids;
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
             (int x, int y) = GetTheNVaporizedAsteroid(200);
 
@@ -170,9 +170,9 @@ namespace AdventOfCode2019
 
         public override bool Equals(object obj)
         {
-            return obj is Asteroid pair &&
-                   x == pair.x &&
-                   y == pair.y;
+            return obj is Asteroid otherAsteroid
+                && x == otherAsteroid.x
+                &&y == otherAsteroid.y;
         }
 
         public override int GetHashCode()
@@ -188,12 +188,12 @@ namespace AdventOfCode2019
             if (xFactor == 0) return (0, yFactor / Math.Abs(yFactor));
             if (yFactor == 0) return (xFactor / Math.Abs(xFactor), 0);
 
-            int maxComMult = Math.Abs(MaximumCommonMultiple(xFactor, yFactor));
+            int maxComMult = Math.Abs(CommonMaximumDivisor(xFactor, yFactor));
 
             return (xFactor / maxComMult, yFactor / maxComMult);
         }
 
-        int MaximumCommonMultiple(int a, int b)
+        int CommonMaximumDivisor(int a, int b)
         {
             int max = Math.Max(a, b);
             int min = Math.Min(a, b);

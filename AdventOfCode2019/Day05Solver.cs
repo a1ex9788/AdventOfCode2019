@@ -14,14 +14,14 @@ namespace AdventOfCode2019
         }
 
 
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
             Console.WriteLine("Remember to write 1.");
 
             return ExecuteIntcodeProgram();
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
             Console.WriteLine("\nRemember to write 5.");
 

@@ -23,7 +23,7 @@ namespace AdventOfCode2019
         }
 
 
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
             Layer fewNumberOf0Layer = layers[0];
             int fewNumberOf0 = int.MaxValue;
@@ -42,13 +42,13 @@ namespace AdventOfCode2019
             return fewNumberOf0Layer.CountAparitions(1) * fewNumberOf0Layer.CountAparitions(2);
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
             string finalLayer = "";
 
             for (int i = 0; i < pixelsTall; i++)
                 for (int j = 0; j < pixelsWide; j++)
-                    finalLayer += CalculeFinalPixel(j, i);
+                    finalLayer += CalculateFinalPixel(j, i);
 
             string res = (new Layer(finalLayer, pixelsWide, pixelsTall)).ToString();
 
@@ -71,7 +71,7 @@ namespace AdventOfCode2019
             return res.Substring(0, res.Length - 2);
         }
 
-        private string CalculeFinalPixel(int i, int j)
+        private string CalculateFinalPixel(int i, int j)
         {
             int pixelNumber = layers[0].GetNumber(i, j); ;
             int layerNumber = 0;

@@ -15,14 +15,14 @@ namespace AdventOfCode2019
         }
 
 
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
             Console.WriteLine("Remember to write 0.");
 
             return GetMaxThrusterSignal();
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
             Console.WriteLine("Remember to write 0.");
 

@@ -14,12 +14,12 @@ namespace AdventOfCode2019
         }
 
 
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
             return ExecuteIntcodeProgram(12, 2);
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
             for (int noun = 0; noun < 99; noun++)
             {

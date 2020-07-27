@@ -18,7 +18,7 @@ namespace AdventOfCode2019
         }
 
 
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
             int numbers = 0;
 
@@ -28,7 +28,7 @@ namespace AdventOfCode2019
             return numbers;
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
             int numbers = 0;
 

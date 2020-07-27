@@ -18,23 +18,22 @@ namespace AdventOfCode2019
         }
 
 
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
-            CalculeCommonPoints();
+            CalculateCommonPoints();
 
             return commonPoints.Min(p => Math.Abs(p.x) + Math.Abs(p.y));
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
-            if (commonPoints == null)
-                CalculeCommonPoints();
+            if (commonPoints == null) CalculateCommonPoints();
 
             return commonPoints.Min(p => StepsToReach(p));
         }
 
 
-        void CalculeCommonPoints()
+        void CalculateCommonPoints()
         {
             List<Point> path1Points = GetVisitedPoints(path1);
             List<Point> path2Points = GetVisitedPoints(path2);

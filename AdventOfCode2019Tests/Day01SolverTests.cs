@@ -12,18 +12,18 @@ namespace AdventOfCode2019Tests
         [DataRow(14, 2)]
         [DataRow(1969, 654)]
         [DataRow(100756, 33583)]
-        public void CalculeFuelTest(int mass, int expectedFuel)
+        public void CalculateFuelTest(int mass, int expectedFuel)
         {
-            Assert.AreEqual(expectedFuel, (new Day1Solver()).CalculeFuel(mass));
+            Assert.AreEqual(expectedFuel, (new Day1Solver()).CalculateFuel(mass));
         }
 
         [TestMethod]
         [DataRow(14, 2)]
         [DataRow(1969, 966)]
         [DataRow(100756, 50346)]
-        public void CalculeFuelWithFuelMassTest(int mass, int expectedFuel)
+        public void CalculateFuelWithFuelMassTest(int mass, int expectedFuel)
         {
-            Assert.AreEqual(expectedFuel, (new Day1Solver()).CalculeFuelCountingFuelMass(mass));
+            Assert.AreEqual(expectedFuel, (new Day1Solver()).CalculateFuelCountingFuelMass(mass));
         }
 
 

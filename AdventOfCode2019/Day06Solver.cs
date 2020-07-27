@@ -31,7 +31,7 @@ namespace AdventOfCode2019
         }
 
 
-        public override int SolvePart1()
+        public override long SolvePart1()
         {
             int numberOfOrbits = 0;
 
@@ -40,7 +40,7 @@ namespace AdventOfCode2019
             return numberOfOrbits;
         }
 
-        public override int SolvePart2()
+        public override long SolvePart2()
         {
             return HowManyOrbitsBetween("YOU", "SAN");
         }
