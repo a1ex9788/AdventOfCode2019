@@ -216,7 +216,7 @@ namespace AdventOfCode2019
 
         public UniverseState(List<Moon> moons)
         {
-            this.moons = moons.Select(m => m.GetCopy()).ToList();
+            this.moons = moons.Select(m => m.Clone()).ToList();
         }
 
         public override bool Equals(object obj)
@@ -264,7 +264,7 @@ namespace AdventOfCode2019
             z += vz;
         }
 
-        public Moon GetCopy()
+        public Moon Clone()
         {
             return new Moon(x, y, z, vx, vy, vz);
         }
