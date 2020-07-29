@@ -10,6 +10,8 @@ namespace AdventOfCode2019
         List<Reaction> reactions;
         LeftOversBag leftOversBag;
 
+        long neededOreToHave1Fuel;
+
         public Day14Solver(string input)
         {
             reactions = new List<Reaction>();
@@ -38,7 +40,9 @@ namespace AdventOfCode2019
 
         public override long SolvePart1()
         {
-            return CalculateNeededOre();
+            neededOreToHave1Fuel = CalculateNeededOre();
+
+            return neededOreToHave1Fuel;
         }
 
         public override long SolvePart2()
@@ -47,22 +51,6 @@ namespace AdventOfCode2019
         }
 
 
-        public int CalculateMaxFuelWith1TOre()
-        {
-            long neededOreToHave1Fuel = CalculateNeededOre();
-
-            long aproxNeededOre = 1000000000000 / neededOreToHave1Fuel;
-
-            int wantedFuel = Convert.ToInt32(Math.Truncate(aproxNeededOre * 0.9));
-
-            long pene = CalculateNeededOre(new ReactionElement(wantedFuel, "FUEL"));
-
-            while (CalculateNeededOre(new ReactionElement(wantedFuel, "FUEL")) < 1000000000000)
-                wantedFuel += Convert.ToInt32(Math.Truncate(aproxNeededOre * 0.05));
-
-            return wantedFuel;
-        }
-
         public long CalculateNeededOre()
         {
             return CalculateNeededOre(new ReactionElement(1, "FUEL"));
@@ -70,13 +58,7 @@ namespace AdventOfCode2019
 
         long CalculateNeededOre(ReactionElement wantedElement)
         {
-            if (wantedElement.elementName.Equals("ORE"))
-                return wantedElement.quantity;
-
-            Reaction originalProducingReaction = SearchProducingReaction(wantedElement);
-            Reaction producingReaction = originalProducingReaction.Clone();
-
-            int leftOvers = leftOversBag.GetThisElement(wantedElement.elementName), newLeftOvers;
+            long leftOvers = leftOversBag.GetThisElement(wantedElement.elementName), newLeftOvers;
 
             if (leftOvers > wantedElement.quantity)
             {
@@ -87,6 +69,12 @@ namespace AdventOfCode2019
                 return 0;
             }
 
+            if (wantedElement.elementName.Equals("ORE"))
+                return wantedElement.quantity;
+
+            Reaction originalProducingReaction = SearchProducingReaction(wantedElement);
+            Reaction producingReaction = originalProducingReaction.Clone();
+
             while (producingReaction.output.quantity + leftOvers < wantedElement.quantity)
                 producingReaction.Sum(originalProducingReaction);
 
@@ -95,6 +83,22 @@ namespace AdventOfCode2019
                 leftOversBag.Add(wantedElement.elementName, newLeftOvers);
             
             return CalculateNeededElements(producingReaction);
+        }
+
+        public long CalculateMaxFuelWith1TOre()
+        {
+            if (neededOreToHave1Fuel == 0)
+                neededOreToHave1Fuel = CalculateNeededOre();
+
+            int aproxMaxFuel = (int)(1000000000000 / neededOreToHave1Fuel);
+
+            int oreLeftOvers = (int)(1000000000000 % neededOreToHave1Fuel);
+
+            leftOversBag.MultiplyBy(aproxMaxFuel);
+
+            leftOversBag.Add("ORE", oreLeftOvers);
+
+            return aproxMaxFuel + CalculateExtraFuelWithLeftOversBag();
         }
 
         long CalculateNeededElements(Reaction reaction)
@@ -113,6 +117,60 @@ namespace AdventOfCode2019
                 if (reaction.HasThisOutput(reactionElement)) return reaction;
 
             return null;
+        }
+
+        InvertedReaction SearchProducingInvertedReaction(ReactionElement reactionElement)
+        {
+            foreach (InvertedReaction invertedReaction in reactions.Select(r => r.GetInvertedReaction()))
+                if (invertedReaction.HasThisInput(reactionElement)) return invertedReaction;
+
+            return null;
+        }
+
+        int CalculateExtraFuelWithLeftOversBag()
+        {
+            int extraFuel = 0;
+
+            do
+            {
+                RecollectOreWithLeftOvers();
+            }
+            while (CanGetMoreOre());
+
+            while (CalculateNeededOre() == 0)
+                extraFuel++;
+
+            return extraFuel;
+
+            bool CanGetMoreOre()
+            {
+                foreach (ReactionElement re in leftOversBag.GetReactionElements())
+                {
+                    if (re.elementName.Equals("ORE")) continue;
+
+                    if (SearchProducingInvertedReaction(re).input.quantity < re.quantity) return true;
+                }
+
+                return false;
+            }
+        }
+
+        void RecollectOreWithLeftOvers()
+        {
+            foreach (ReactionElement reactionElement in leftOversBag.GetReactionElements())
+            {
+                if (reactionElement.elementName.Equals("ORE")) continue;
+
+                InvertedReaction producingInvertedReaction = SearchProducingInvertedReaction(reactionElement);
+
+                producingInvertedReaction.GrowIHave(reactionElement);
+
+
+                leftOversBag.Remove(reactionElement.elementName, producingInvertedReaction.input.quantity);
+
+                foreach (ReactionElement re in producingInvertedReaction.outputs)
+                    leftOversBag.Add(re.elementName, re.quantity);
+            }
         }
     }
 
@@ -155,11 +213,56 @@ namespace AdventOfCode2019
         {
             return new Reaction(inputs.Select(re => re.Clone()).ToList(), output.Clone());
         }
+
+        public InvertedReaction GetInvertedReaction()
+        {
+            Reaction clonnedReaction = this.Clone();
+
+            return new InvertedReaction(clonnedReaction.output, clonnedReaction.inputs);
+        }
+    }
+
+    public class InvertedReaction
+    {
+        public ReactionElement input;
+        public List<ReactionElement> outputs;
+
+        public InvertedReaction(ReactionElement input, List<ReactionElement> outputs)
+        {
+            this.input = input;
+            this.outputs = outputs;
+        }
+
+
+        public bool HasThisInput(ReactionElement expectedElement)
+        {
+            return input.elementName.Equals(expectedElement.elementName);
+        }
+
+        public override string ToString()
+        {
+            string res = input.ToString() + " => ";
+
+            foreach (ReactionElement re in outputs)
+                res += re + ", ";
+
+            return res.Substring(0, res.Length - 2);
+        }
+
+        public void GrowIHave(ReactionElement reactionElement)
+        {
+            long factor = reactionElement.quantity / input.quantity;
+
+            input.quantity *= factor;
+
+            foreach (ReactionElement ra in outputs)
+                ra.quantity *= factor;
+        }
     }
 
     public class ReactionElement
     {
-        public int quantity;
+        public long quantity;
         public string elementName;
 
         public ReactionElement(string element)
@@ -170,7 +273,7 @@ namespace AdventOfCode2019
             elementName = elements[1];
         }
 
-        public ReactionElement(int quantity, string elementName)
+        public ReactionElement(long quantity, string elementName)
         {
             this.quantity = quantity;
             this.elementName = elementName;
@@ -195,39 +298,75 @@ namespace AdventOfCode2019
 
     public class LeftOversBag
     {
-        Dictionary<string, int> leftOversBag;
+        List<ReactionElement> reactionElements;
 
         public LeftOversBag()
         {
-            leftOversBag = new Dictionary<string, int>();
+            reactionElements = new List<ReactionElement>();
         }
 
 
-        public void Add(string chemicalElement, int quantity)
+        public void Add(string chemicalElement, long quantity)
         {
-            if (leftOversBag.ContainsKey(chemicalElement))
-            {
-                int oldQuantity = leftOversBag[chemicalElement];
+            if (quantity == 0) return;
 
-                leftOversBag.Remove(chemicalElement);
-                leftOversBag.Add(chemicalElement, oldQuantity + quantity);
-            }
+            ReactionElement reactionElement = FindReactionElement(chemicalElement);
+
+            if (reactionElement != null)
+                reactionElement.quantity += quantity;
             else
-                leftOversBag.Add(chemicalElement, quantity);
+                reactionElements.Add(new ReactionElement(quantity, chemicalElement));
         }
 
-        public int GetThisElement(string chemicalElement)
+        public long GetThisElement(string chemicalElement)
         {
-            int quantity = 0;
+            ReactionElement reactionElement = FindReactionElement(chemicalElement);
 
-            try
+            if (reactionElement != null)
             {
-                quantity = leftOversBag[chemicalElement];
-                leftOversBag.Remove(chemicalElement);
-            }
-            catch (Exception) { }
+                reactionElements.Remove(reactionElement);
 
-            return quantity;
+                return reactionElement.quantity;
+            }
+
+            return 0;
+        }
+
+        public void Remove(string elementName, long quantity)
+        {
+            ReactionElement reactionElement = FindReactionElement(elementName);
+
+            reactionElement.quantity -= quantity;
+
+            if (reactionElement.quantity == 0) reactionElements.Remove(reactionElement);
+
+            if (reactionElement.quantity < 0) throw new Exception("It's not possible to have les than 0 as a quantity of an element.");
+        }
+
+        ReactionElement FindReactionElement(string elementName)
+        {
+            return reactionElements.Where(re => re.elementName.Equals(elementName)).FirstOrDefault();
+        }
+
+        public void MultiplyBy(int number)
+        {
+            foreach (ReactionElement reactionElement in reactionElements)
+                reactionElement.quantity *= number;
+        }
+
+        public List<ReactionElement> GetReactionElements()
+        {
+            List<ReactionElement> res = new List<ReactionElement>();
+
+            foreach (ReactionElement re in reactionElements)
+                res.Add(re.Clone());
+
+            return res;
+        }
+
+        public int Count()
+        {
+            return reactionElements.Count;
         }
     }
 }

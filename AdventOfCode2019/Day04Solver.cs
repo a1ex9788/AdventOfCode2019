@@ -9,10 +9,10 @@ namespace AdventOfCode2019
     {
         int firstNumber, secondNumber;
 
-        public Day4Solver() { }
-
-        public Day4Solver(string input)
+        public Day4Solver(string input = null)
         {
+            if (input == null) return;
+
             firstNumber = int.Parse(input.Split('-')?[0]);
             secondNumber = int.Parse(input.Split('-')?[1]);
         }
